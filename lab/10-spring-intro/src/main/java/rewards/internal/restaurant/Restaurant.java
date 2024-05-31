@@ -9,7 +9,6 @@ import common.repository.Entity;
 
 /**
  * A restaurant establishment in the network. Like AppleBee's.
- * 
  * Restaurants calculate how much benefit may be awarded to an account for dining based on a benefit percentage.
  */
 public class Restaurant extends Entity {
