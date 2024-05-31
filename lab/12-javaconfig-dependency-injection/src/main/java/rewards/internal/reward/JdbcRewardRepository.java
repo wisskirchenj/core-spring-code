@@ -33,11 +33,11 @@ public class JdbcRewardRepository implements RewardRepository {
 			ps = conn.prepareStatement(sql);
 			String confirmationNumber = nextConfirmationNumber();
 			ps.setString(1, confirmationNumber);
-			ps.setBigDecimal(2, contribution.getAmount().asBigDecimal());
+			ps.setBigDecimal(2, contribution.amount().asBigDecimal());
 			ps.setDate(3, new Date(SimpleDate.today().inMilliseconds()));
-			ps.setString(4, contribution.getAccountNumber());
+			ps.setString(4, contribution.accountNumber());
 			ps.setString(5, dining.getMerchantNumber());
-			ps.setDate(6, new Date(dining.getDate().inMilliseconds()));
+			ps.setDate(6, new Date(dining.date().inMilliseconds()));
 			ps.setBigDecimal(7, dining.getAmount().asBigDecimal());
 			ps.execute();
 			return new RewardConfirmation(confirmationNumber, contribution);

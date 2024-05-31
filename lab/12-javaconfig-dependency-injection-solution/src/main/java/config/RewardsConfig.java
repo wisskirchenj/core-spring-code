@@ -16,7 +16,7 @@ import rewards.internal.reward.RewardRepository;
 
 @Configuration
 public class RewardsConfig {
-	private DataSource dataSource;
+	private final DataSource dataSource;
 
 	// As this is the only constructor, @Autowired is not needed.
 	public RewardsConfig(DataSource dataSource) {
@@ -24,7 +24,7 @@ public class RewardsConfig {
 	}
 		
 	@Bean
-	public RewardNetwork rewardNetwork(){
+	RewardNetwork rewardNetwork(){
 		return new RewardNetworkImpl(
 			accountRepository(), 
 			restaurantRepository(), 
@@ -32,21 +32,21 @@ public class RewardsConfig {
 	}
 	
 	@Bean
-	public AccountRepository accountRepository(){
+	AccountRepository accountRepository(){
 		JdbcAccountRepository repository = new JdbcAccountRepository();
 		repository.setDataSource(dataSource);
 		return repository;
 	}
 	
 	@Bean
-	public RestaurantRepository restaurantRepository(){
+	RestaurantRepository restaurantRepository(){
 		JdbcRestaurantRepository repository = new JdbcRestaurantRepository();
 		repository.setDataSource(dataSource);
 		return repository;
 	}
 	
 	@Bean
-	public RewardRepository rewardRepository(){
+	RewardRepository rewardRepository(){
 		JdbcRewardRepository repository = new JdbcRewardRepository();
 		repository.setDataSource(dataSource);
 		return repository;

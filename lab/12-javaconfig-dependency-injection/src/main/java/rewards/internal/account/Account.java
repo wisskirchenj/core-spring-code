@@ -14,10 +14,10 @@ import common.repository.Entity;
 /**
  * An account for a member of the reward network. An account has one or more beneficiaries whose allocations must add up
  * to 100%.
- * 
+ * <p>
  * An account can make contributions to its beneficiaries. Each contribution is distributed among the beneficiaries
  * based on an allocation.
- * 
+ * <p>
  * An entity. An aggregate.
  */
 public class Account extends Entity {
@@ -26,7 +26,7 @@ public class Account extends Entity {
 
 	private String name;
 
-	private Set<Beneficiary> beneficiaries = new HashSet<Beneficiary>();
+	private final Set<Beneficiary> beneficiaries = new HashSet<>();
 
 	@SuppressWarnings("unused")
 	private Account() {
@@ -34,8 +34,9 @@ public class Account extends Entity {
 
 	/**
 	 * Create a new account.
+	 *
 	 * @param number the account number
-	 * @param name the name on the account
+	 * @param name   the name on the account
 	 */
 	public Account(String number, String name) {
 		this.number = number;
@@ -58,6 +59,7 @@ public class Account extends Entity {
 
 	/**
 	 * Add a single beneficiary with a 100% allocation percentage.
+	 *
 	 * @param beneficiaryName the name of the beneficiary (should be unique)
 	 */
 	public void addBeneficiary(String beneficiaryName) {
@@ -66,7 +68,8 @@ public class Account extends Entity {
 
 	/**
 	 * Add a single beneficiary with the specified allocation percentage.
-	 * @param beneficiaryName the name of the beneficiary (should be unique)
+	 *
+	 * @param beneficiaryName      the name of the beneficiary (should be unique)
 	 * @param allocationPercentage the beneficiary's allocation percentage within this account
 	 */
 	public void addBeneficiary(String beneficiaryName, Percentage allocationPercentage) {
@@ -81,16 +84,13 @@ public class Account extends Entity {
 		for (Beneficiary b : beneficiaries) {
 			totalPercentage = totalPercentage.add(b.getAllocationPercentage());
 		}
-		if (totalPercentage.equals(Percentage.oneHundred())) {
-			return true;
-		} else {
-			return false;
-		}
+		return totalPercentage.equals(Percentage.oneHundred());
 	}
 
 	/**
 	 * Make a monetary contribution to this account. The contribution amount is distributed among the account's
 	 * beneficiaries based on each beneficiary's allocation percentage.
+	 *
 	 * @param amount the total amount to contribute
 	 */
 	public AccountContribution makeContribution(MonetaryAmount amount) {
@@ -104,11 +104,12 @@ public class Account extends Entity {
 
 	/**
 	 * Distribute the contribution amount among this account's beneficiaries.
+	 *
 	 * @param amount the total contribution amount
 	 * @return the individual beneficiary distributions
 	 */
 	private Set<Distribution> distribute(MonetaryAmount amount) {
-		Set<Distribution> distributions = new HashSet<Distribution>(beneficiaries.size());
+		Set<Distribution> distributions = HashSet.newHashSet(beneficiaries.size());
 		for (Beneficiary beneficiary : beneficiaries) {
 			MonetaryAmount distributionAmount = amount.multiplyBy(beneficiary.getAllocationPercentage());
 			beneficiary.credit(distributionAmount);
@@ -124,6 +125,7 @@ public class Account extends Entity {
 	 * <p>
 	 * Callers should not attempt to hold on or modify the returned set. This method should only be used transitively;
 	 * for example, called to facilitate account reporting.
+	 *
 	 * @return the beneficiaries of this account
 	 */
 	public Set<Beneficiary> getBeneficiaries() {
@@ -133,6 +135,7 @@ public class Account extends Entity {
 	/**
 	 * Used to restore an allocated beneficiary. Should only be called by the repository responsible for reconstituting
 	 * this account.
+	 *
 	 * @param beneficiary the beneficiary
 	 */
 	void restoreBeneficiary(Beneficiary beneficiary) {

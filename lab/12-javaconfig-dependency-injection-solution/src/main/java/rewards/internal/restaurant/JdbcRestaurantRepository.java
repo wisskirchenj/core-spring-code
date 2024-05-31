@@ -1,15 +1,13 @@
 package rewards.internal.restaurant;
 
+import common.money.Percentage;
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-
-import common.money.Percentage;
 
 /**
  * Loads restaurants from a data source using the JDBC API.
@@ -28,7 +26,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 
 	public Restaurant findByMerchantNumber(String merchantNumber) {
 		String sql = "select MERCHANT_NUMBER, NAME, BENEFIT_PERCENTAGE from T_RESTAURANT where MERCHANT_NUMBER = ?";
-		Restaurant restaurant = null;
+		Restaurant restaurant;
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -86,7 +84,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 * Advances a ResultSet to the next row and throws an exception if there are no rows.
 	 * @param rs the ResultSet to advance
 	 * @throws EmptyResultDataAccessException if there is no next row
-	 * @throws SQLException
+	 * @throws SQLException if there is a problem advancing the ResultSet
 	 */
 	private void advanceToNextRow(ResultSet rs) throws EmptyResultDataAccessException, SQLException {
 		if (!rs.next()) {

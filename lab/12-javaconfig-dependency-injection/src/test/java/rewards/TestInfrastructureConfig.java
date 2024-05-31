@@ -15,33 +15,33 @@ import javax.sql.DataSource;
  *   'src/main/resources/rewards/testdb' directory of
  *   the '00-rewards-common' project
  * - Do not modify this method.
- *
+ * <p>
  * TODO-07: Import your application configuration file (RewardsConfig)
  * - Now the test code should have access to all the beans defined in
  *   the RewardsConfig configuration class
- *
+ * <p>
  * TODO-08: Create a new JUnit 5 test class
  * - Call it RewardNetworkTests
  * - Create it in the same package this configuration class is located.
  * - Ask for a setUp() method to be generated within your IDE.
- *
+ * <p>
  * NOTE: The appendices at the bottom of the course Home Page includes
  * a section on creating JUnit tests in an IDE.
- *
+ * <p>
  * TODO-09: Make sure the setUp() method in the RewardNetworkTests class is annotated with @BeforeEach.
  * - In the setUp() method, create an application context using
  *   this configuration class - use run(..) static method of
  *   the SpringApplication class
  * - Then get the 'rewardNetwork' bean from the application context
  *   and assign it to a private field for use later.
- *
+ * <p>
  * TODO-10: We can test the setup by running an empty test.
  * - If your IDE automatically generated a @Test method, rename it
  *   testRewardForDining. Delete any code in the method body.
  * - Otherwise add a testRewardForDining method & annotate it with
- *   @Test (make sure the @Test is from org.junit.jupiter.api.Test ).
+ *   @Test (make sure the @ Test is from org.junit.jupiter.api.Test).
  * - Run the test. If your setup() is working, you get a green bar.
- *
+ * <p>
  * TODO-11: Finally run a real test.
  * - Copy the unit test (the @Test method) from
  *   RewardNetworkImplTests#testRewardForDining() under
@@ -50,20 +50,19 @@ import javax.sql.DataSource;
  * - Run the test - it should pass if you have configured everything
  *   correctly. Congratulations, you are done.
  * - If your test fails - did you miss the import in TO DO 7 above?
- *
  */
 @Configuration
-public class TestInfrastructureConfig {
+class TestInfrastructureConfig {
 
-	/**
-	 * Creates an in-memory "rewards" database populated
-	 * with test data for fast testing
-	 */
-	@Bean
-	public DataSource dataSource() {
-		return (new EmbeddedDatabaseBuilder()) //
-				.addScript("classpath:rewards/testdb/schema.sql") //
-				.addScript("classpath:rewards/testdb/data.sql") //
-				.build();
-	}
+    /**
+     * Creates an in-memory "rewards" database populated
+     * with test data for fast testing
+     */
+    @Bean
+    DataSource dataSource() {
+        return (new EmbeddedDatabaseBuilder()) //
+                .addScript("classpath:rewards/testdb/schema.sql") //
+                .addScript("classpath:rewards/testdb/data.sql") //
+                .build();
+    }
 }
