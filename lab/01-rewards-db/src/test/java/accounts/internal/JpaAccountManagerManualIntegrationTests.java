@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utils.DataManagementSetup;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Manually configured integration test (not using Spring) for the JPA-based
@@ -23,7 +23,7 @@ public class JpaAccountManagerManualIntegrationTests extends AbstractDatabaseAcc
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(accountManager instanceof JpaAccountManager, "JPA expected");
+        assertInstanceOf(JpaAccountManager.class, accountManager, "JPA expected");
 		logger.info("JPA with Hibernate");
 	}
 
@@ -35,7 +35,7 @@ public class JpaAccountManagerManualIntegrationTests extends AbstractDatabaseAcc
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		transactionUtils.rollbackTransaction();
 	}
 

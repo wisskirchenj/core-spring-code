@@ -5,7 +5,6 @@ import rewards.internal.account.Account;
 
 /**
  * Determines if benefit is available for an account for dining.
- * 
  * A value object. A strategy. Scoped by the Resturant aggregate.
  */
 public interface BenefitAvailabilityPolicy {
@@ -16,5 +15,5 @@ public interface BenefitAvailabilityPolicy {
 	 * @param dining the dining event
 	 * @return benefit availability status
 	 */
-	public boolean isBenefitAvailableFor(Account account, Dining dining);
+	boolean isBenefitAvailableFor(Account account, Dining dining);
 }

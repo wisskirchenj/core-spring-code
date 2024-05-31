@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit tests for exercising the behavior of the Restaurant aggregate entity. A restaurant calculates a benefit to award
  * to an account for dining based on an availability policy and benefit percentage.
  */
-public class RestaurantTests {
+class RestaurantTests {
 
 	private Restaurant restaurant;
 
@@ -34,14 +34,14 @@ public class RestaurantTests {
 	}
 
 	@Test
-	public void testCalcuateBenefitFor() {
+	void testCalcuateBenefitFor() {
 		MonetaryAmount benefit = restaurant.calculateBenefitFor(account, dining);
 		// assert 8.00 eligible for reward
 		assertEquals(MonetaryAmount.valueOf("8.00"), benefit);
 	}
 
 	@Test
-	public void testNoBenefitAvailable() {
+	void testNoBenefitAvailable() {
 		// configure stub that always returns false
 		restaurant.setBenefitAvailabilityPolicy(new StubBenefitAvailibilityPolicy(false));
 		MonetaryAmount benefit = restaurant.calculateBenefitFor(account, dining);
@@ -54,16 +54,10 @@ public class RestaurantTests {
 	 * Only useful for testing--a real availability policy might consider many factors such as the day of week of the
 	 * dining, or the account's reward history for the current month.
 	 */
-	private static class StubBenefitAvailibilityPolicy implements BenefitAvailabilityPolicy {
-
-		private boolean isBenefitAvailable;
-
-		public StubBenefitAvailibilityPolicy(boolean isBenefitAvailable) {
-			this.isBenefitAvailable = isBenefitAvailable;
-		}
+		private record StubBenefitAvailibilityPolicy(boolean isBenefitAvailable) implements BenefitAvailabilityPolicy {
 
 		public boolean isBenefitAvailableFor(Account account, Dining dining) {
-			return isBenefitAvailable;
+				return isBenefitAvailable;
+			}
 		}
-	}
 }

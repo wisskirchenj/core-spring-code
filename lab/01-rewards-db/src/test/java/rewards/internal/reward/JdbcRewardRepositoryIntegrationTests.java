@@ -26,9 +26,7 @@ public class JdbcRewardRepositoryIntegrationTests extends
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(
-				rewardRepository.getInfo().equals(JdbcRewardRepository.TYPE),
-				"JDBC expected but found " + rewardRepository.getInfo());
+        assertEquals(JdbcRewardRepository.TYPE, rewardRepository.getInfo(), "JDBC expected but found " + rewardRepository.getInfo());
 	}
 
 }

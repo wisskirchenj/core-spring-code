@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Integration test for the JPA-based restaurant repository implementation.
@@ -23,8 +23,7 @@ public class JpaRestaurantRepositoryIntegrationTests extends AbstractRestaurantR
     @Test
     @Override
     public void testProfile() {
-        assertTrue(restaurantRepository.getInfo().equals(JpaRestaurantRepository.INFO)
-                , "JPA expected but found " + restaurantRepository.getInfo());
+        assertEquals(JpaRestaurantRepository.INFO, restaurantRepository.getInfo(), "JPA expected but found " + restaurantRepository.getInfo());
     }
 
 }

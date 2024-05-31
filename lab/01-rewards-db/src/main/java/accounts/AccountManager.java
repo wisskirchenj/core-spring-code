@@ -19,14 +19,14 @@ public interface AccountManager {
 	 * 
 	 * @return Implementation information.
 	 */
-	public String getInfo();
+	String getInfo();
 
 	/**
 	 * Get all accounts in the system
 	 * 
 	 * @return all accounts
 	 */
-	public List<Account> getAllAccounts();
+	List<Account> getAllAccounts();
 
 	/**
 	 * Find an account by its number.
@@ -35,7 +35,7 @@ public interface AccountManager {
 	 *            the account id
 	 * @return the account
 	 */
-	public Account getAccount(Long id);
+	Account getAccount(Long id);
 
 	/**
 	 * Takes a transient account and persists it.
@@ -45,7 +45,7 @@ public interface AccountManager {
 	 * @return The persistent account - this may or may not be the same object
 	 *         as the method argument.
 	 */
-	public Account save(Account account);
+	Account save(Account account);
 
 	/**
 	 * Takes a changed account and persists any changes made to it.
@@ -53,7 +53,7 @@ public interface AccountManager {
 	 * @param account
 	 *            The account with changes
 	 */
-	public void update(Account account);
+	void update(Account account);
 
 	/**
 	 * Updates the allocation percentages for the entire collection of
@@ -65,7 +65,7 @@ public interface AccountManager {
 	 *            A map of beneficiary names and allocation percentages, keyed
 	 *            by beneficiary name
 	 */
-	public void updateBeneficiaryAllocationPercentages(Long accountId,
+	void updateBeneficiaryAllocationPercentages(Long accountId,
 			Map<String, Percentage> allocationPercentages);
 
 	/**
@@ -77,7 +77,7 @@ public interface AccountManager {
 	 * @param beneficiaryName
 	 *            the name of the beneficiary to remove
 	 */
-	public void addBeneficiary(Long accountId, String beneficiaryName);
+	void addBeneficiary(Long accountId, String beneficiaryName);
 
 	/**
 	 * Removes a beneficiary from an account.
@@ -89,6 +89,6 @@ public interface AccountManager {
 	 * @param allocationPercentages
 	 *            new allocation percentages, keyed by beneficiary name
 	 */
-	public void removeBeneficiary(Long accountId, String beneficiaryName,
+	void removeBeneficiary(Long accountId, String beneficiaryName,
 			Map<String, Percentage> allocationPercentages);
 }

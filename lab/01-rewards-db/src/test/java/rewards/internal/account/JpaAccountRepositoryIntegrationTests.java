@@ -24,7 +24,7 @@ public class JpaAccountRepositoryIntegrationTests extends AbstractAccountReposit
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(accountRepository.getInfo().equals(JpaAccountRepository.INFO), "JPA expected but found " + accountRepository.getInfo());
+        assertEquals(JpaAccountRepository.INFO, accountRepository.getInfo(), "JPA expected but found " + accountRepository.getInfo());
 	}
 
 }

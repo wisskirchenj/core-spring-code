@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Spring-driven integration test for the JPA-based account manager
@@ -23,7 +23,7 @@ public class JpaAccountManagerIntegrationTests extends AbstractDatabaseAccountMa
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(accountManager.getInfo().equals("JPA"), "JPA expected but found " + accountManager.getInfo());
+        assertEquals("JPA", accountManager.getInfo(), "JPA expected but found " + accountManager.getInfo());
 	}
 
 }

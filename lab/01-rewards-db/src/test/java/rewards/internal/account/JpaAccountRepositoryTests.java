@@ -8,7 +8,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import utils.DataManagementSetup;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Manually configured integration test for the JPA based account repository
@@ -22,7 +22,7 @@ public class JpaAccountRepositoryTests extends AbstractAccountRepositoryTests {
 	private TransactionStatus transactionStatus;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		DataManagementSetup dataManagementSetup = new DataManagementSetup();
 
 		JpaAccountRepository accountRepository = new JpaAccountRepository();
@@ -37,11 +37,11 @@ public class JpaAccountRepositoryTests extends AbstractAccountRepositoryTests {
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(accountRepository instanceof JpaAccountRepository, "JPA expected");
+        assertInstanceOf(JpaAccountRepository.class, accountRepository, "JPA expected");
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		// rollback the transaction to avoid corrupting other tests
 		if (transactionManager != null)
 			transactionManager.rollback(transactionStatus);

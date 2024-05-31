@@ -1,18 +1,15 @@
 package accounts.internal;
 
+import common.money.Percentage;
+import rewards.internal.account.Account;
+import rewards.internal.account.Beneficiary;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.springframework.orm.ObjectRetrievalFailureException;
-
-import rewards.internal.account.Account;
-import rewards.internal.account.Beneficiary;
-
-import common.money.Percentage;
 
 /**
  * IMPORTANT: Per best practices, this class shouldn't be in 'src/main/java'
@@ -37,9 +34,9 @@ public class StubAccountManager extends AbstractAccountManager {
 	public static final String TEST_BEN1_NAME = "Corgan";
 	public static final String BENEFICIARY_SHARE = "50%";
 
-	private Map<Long, Account> accountsById = new HashMap<Long, Account>();
+	private final Map<Long, Account> accountsById = new HashMap<>();
 
-	private AtomicLong nextEntityId = new AtomicLong(3);
+	private final AtomicLong nextEntityId = new AtomicLong(3);
 
 	public StubAccountManager() {
 		// One test account
@@ -60,7 +57,7 @@ public class StubAccountManager extends AbstractAccountManager {
 
 	@Override
 	public List<Account> getAllAccounts() {
-		return new ArrayList<Account>(accountsById.values());
+		return new ArrayList<>(accountsById.values());
 	}
 
 	@Override

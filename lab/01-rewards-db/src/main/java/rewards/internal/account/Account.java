@@ -1,25 +1,23 @@
 package rewards.internal.account;
 
+import common.money.MonetaryAmount;
+import common.money.Percentage;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import rewards.AccountContribution;
+import rewards.AccountContribution.Distribution;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import rewards.AccountContribution;
-import rewards.AccountContribution.Distribution;
-
-import common.money.MonetaryAmount;
-import common.money.Percentage;
 
 /**
  * An account for a member of the reward network. An account has one or more
@@ -47,7 +45,7 @@ public class Account {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ACCOUNT_ID")
-	private Set<Beneficiary> beneficiaries = new HashSet<Beneficiary>();
+	private Set<Beneficiary> beneficiaries = new HashSet<>();
 
 	protected Account() {
 	}
@@ -204,11 +202,7 @@ public class Account {
 				return false;
 			}
 		}
-		if (totalPercentage.equals(Percentage.oneHundred())) {
-			return true;
-		} else {
-			return false;
-		}
+        return totalPercentage.equals(Percentage.oneHundred());
 	}
 
 	public void setValid(boolean valid) {
@@ -222,8 +216,6 @@ public class Account {
 	 * 
 	 * @param amount
 	 *            the total amount to contribute
-	 * @param contribution
-	 *            the contribution summary
 	 */
 	public AccountContribution makeContribution(MonetaryAmount amount) {
 		if (!isValid()) {
@@ -242,8 +234,7 @@ public class Account {
 	 * @return the individual beneficiary distributions
 	 */
 	private Set<Distribution> distribute(MonetaryAmount amount) {
-		Set<Distribution> distributions = new HashSet<Distribution>(
-				beneficiaries.size());
+		Set<Distribution> distributions = HashSet.newHashSet(beneficiaries.size());
 		for (Beneficiary beneficiary : beneficiaries) {
 			MonetaryAmount distributionAmount = amount.multiplyBy(beneficiary
 					.getAllocationPercentage());

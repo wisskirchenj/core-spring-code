@@ -13,7 +13,6 @@ import common.money.Percentage;
 /**
  * A dummy restaurant repository implementation. Has a single restaurant "Apple Bees" with a 8% benefit availability
  * percentage that's always available.
- * 
  * Stubs facilitate unit testing. An object needing a RestaurantRepository can work with this stub and not have to bring
  * in expensive and/or complex dependencies such as a Database. Simple unit tests can then verify object behavior by
  * considering the state of this stub.
@@ -22,7 +21,7 @@ public class StubRestaurantRepository implements RestaurantRepository {
 
 	public static final String TYPE = "Stub";
 
-	private Map<String, Restaurant> restaurantsByMerchantNumber = new HashMap<String, Restaurant>();
+	private final Map<String, Restaurant> restaurantsByMerchantNumber = new HashMap<>();
 
 	public StubRestaurantRepository() {
 		Restaurant restaurant = new Restaurant("1234567890", "Apple Bees");
@@ -38,7 +37,7 @@ public class StubRestaurantRepository implements RestaurantRepository {
 
 	@Override
 	public Restaurant findByMerchantNumber(String merchantNumber) {
-		Restaurant restaurant = (Restaurant) restaurantsByMerchantNumber.get(merchantNumber);
+		Restaurant restaurant = restaurantsByMerchantNumber.get(merchantNumber);
 		if (restaurant == null) {
 			throw new ObjectRetrievalFailureException(Restaurant.class, merchantNumber);
 		}

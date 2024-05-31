@@ -26,69 +26,70 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public abstract class AbstractRewardRepositoryTests {
 
-	@Autowired
-	protected JdbcRewardRepository rewardRepository;
+    @Autowired
+    protected JdbcRewardRepository rewardRepository;
 
-	@Autowired
-	protected DataSource dataSource;
+    @Autowired
+    protected DataSource dataSource;
 
-	@Test
-	public abstract void testProfile();
+    @Test
+    public abstract void testProfile();
 
-	@Test
-	@Transactional
-	public void createReward() throws SQLException {
-		Dining dining = Dining.createDining("100.00", "1234123412341234",
-				"0123456789");
+    @Test
+    @Transactional
+    public void createReward() throws SQLException {
+        Dining dining = Dining.createDining("100.00", "1234123412341234",
+                "0123456789");
 
-		Account account = new Account("1", "Keith and Keri Donald");
-		account.setEntityId(0L);
-		account.addBeneficiary("Annabelle", Percentage.valueOf("50%"));
-		account.addBeneficiary("Corgan", Percentage.valueOf("50%"));
+        Account account = new Account("1", "Keith and Keri Donald");
+        account.setEntityId(0L);
+        account.addBeneficiary("Annabelle", Percentage.valueOf("50%"));
+        account.addBeneficiary("Corgan", Percentage.valueOf("50%"));
 
-		AccountContribution contribution = account
-				.makeContribution(MonetaryAmount.valueOf("8.00"));
-		RewardConfirmation confirmation = rewardRepository.confirmReward(
-				contribution, dining);
-		assertNotNull(confirmation, "confirmation should not be null");
-		assertNotNull("confirmation number should not be null",
-				confirmation.getConfirmationNumber());
-		assertEquals(contribution,
-				confirmation.getAccountContribution(), "wrong contribution object");
-		verifyRewardInserted(confirmation, dining);
-	}
+        AccountContribution contribution = account
+                .makeContribution(MonetaryAmount.valueOf("8.00"));
+        RewardConfirmation confirmation = rewardRepository.confirmReward(
+                contribution, dining);
+        assertNotNull(confirmation, "confirmation should not be null");
+        assertNotNull(confirmation.confirmationNumber(),
+                "confirmation number should not be null");
+        assertEquals(contribution,
+                confirmation.accountContribution(), "wrong contribution object");
+        verifyRewardInserted(confirmation);
+    }
 
-	private void verifyRewardInserted(RewardConfirmation confirmation,
-			Dining dining) throws SQLException {
-		assertEquals(1, getRewardCount());
-		Statement stmt = getCurrentConnection().createStatement();
-		ResultSet rs = stmt
-				.executeQuery("select REWARD_AMOUNT from T_REWARD where CONFIRMATION_NUMBER = '"
-						+ confirmation.getConfirmationNumber() + "'");
-		rs.next();
-		assertEquals(confirmation.getAccountContribution().getAmount(),
-				MonetaryAmount.valueOf(rs.getString(1)));
-	}
+    private void verifyRewardInserted(RewardConfirmation confirmation) throws SQLException {
+        assertEquals(1, getRewardCount());
+        try (Statement stmt = getCurrentConnection().createStatement()) {
+            ResultSet rs = stmt
+                    .executeQuery("select REWARD_AMOUNT from T_REWARD where CONFIRMATION_NUMBER = '"
+                                  + confirmation.confirmationNumber() + "'");
+            rs.next();
+            assertEquals(confirmation.accountContribution().amount(),
+                    MonetaryAmount.valueOf(rs.getString(1)));
+        }
+    }
 
-	private int getRewardCount() throws SQLException {
-		Statement stmt = getCurrentConnection().createStatement();
-		ResultSet rs = stmt.executeQuery("select count(*) from T_REWARD");
-		rs.next();
-		return rs.getInt(1);
-	}
+    private int getRewardCount() throws SQLException {
+        try (Statement stmt = getCurrentConnection().createStatement()) {
+            ResultSet rs = stmt.executeQuery("select count(*) from T_REWARD");
+            rs.next();
+            return rs.getInt(1);
+        }
+    }
 
-	/**
-	 * Gets the connection behind the current transaction - this allows the
-	 * tests to use the transaction created for the @Transactional test and see
-	 * the changes made.
-	 * <p>
-	 * Using a different (new) connection would fail because the T_REWARD table
-	 * is locked by any updates and the queries in <tt>verifyRewardInserted</tt>
-	 * and <tt>getRewardCount</tt> can never return.
-	 * 
-	 * @return The current connection
-	 */
-	private Connection getCurrentConnection() {
-		return DataSourceUtils.getConnection(dataSource);
-	}
+    /**
+     * Gets the connection behind the current transaction - this allows the
+     * tests to use the transaction created for the @Transactional test and see
+     * the changes made.
+     * <p>
+     * Using a different (new) connection would fail because the T_REWARD table
+     * is locked by any updates and the queries in <tt>verifyRewardInserted</tt>
+     * and <tt>getRewardCount</tt> can never return.
+     *
+     * @return The current connection
+     */
+    private Connection getCurrentConnection() {
+        return DataSourceUtils.getConnection(dataSource);
+    }
 }

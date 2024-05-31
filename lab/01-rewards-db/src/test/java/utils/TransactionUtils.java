@@ -43,11 +43,9 @@ public class TransactionUtils {
 
 	/**
 	 * Begin a new transaction, ensuring one is not running already
-	 * 
-	 * @throws Exception
-	 *             A transaction is already running.
-	 */
-	public void beginTransaction() throws Exception {
+	 *
+     */
+	public void beginTransaction() {
 		// Make sure no transaction is running
 		try {
 			transactionStatus = transactionManager
@@ -61,18 +59,15 @@ public class TransactionUtils {
 		transactionStatus = transactionManager
 				.getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
-		assert (transactionStatus != null);
 		assert (transactionStatus.isNewTransaction());
-		logger.info("NEW " + transactionStatus + " - completed = " + transactionStatus.isCompleted());
+		logger.info("NEW {} - completed = {}", transactionStatus, transactionStatus.isCompleted());
 	}
 
 	/**
 	 * Rollback the current transaction - there must be one.
-	 * 
-	 * @throws Exception
-	 *             A transaction is NOT already running.
-	 */
-	public void rollbackTransaction() throws Exception {
+	 *
+     */
+	public void rollbackTransaction() {
 		// Make sure an exception is running
 		try {
 			transactionManager
@@ -83,20 +78,20 @@ public class TransactionUtils {
 		}
 
 		// Rollback the transaction to avoid corrupting other tests
-		logger.info("ROLLBACKK " + transactionStatus);
+		logger.info("ROLLBACK {}", transactionStatus);
 		transactionManager.rollback(transactionStatus);
 	}
 
 	/**
 	 * Get the current transaction - there should be one.
 	 * 
-	 * @return
+	 * @return transaction The current transaction.
 	 */
 	public TransactionStatus getCurrentTransaction() {
 		TransactionDefinition definition = new DefaultTransactionDefinition(
 				DefaultTransactionDefinition.PROPAGATION_MANDATORY);
 		TransactionStatus transaction = transactionManager.getTransaction(definition);
-		logger.info("TRANSACTION = " + transaction);
+		logger.info("TRANSACTION = {}", transaction);
 		return transaction;
 	}
 
@@ -109,7 +104,7 @@ public class TransactionUtils {
 		TransactionDefinition definition = new DefaultTransactionDefinition(
 				DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus transaction = transactionManager.getTransaction(definition);
-		logger.info("TRANSACTION = " + transaction);
+		logger.info("TRANSACTION = {}", transaction);
 		return transaction;
 	}
 
@@ -117,13 +112,13 @@ public class TransactionUtils {
 	 * Start a brand new transaction - forcing a new one if one exists already
 	 * (using {@link TransactionDefinition#PROPAGATION_REQUIRES_NEW}).
 	 * 
-	 * @return
+	 * @return The new transaction.
 	 */
 	public TransactionStatus getNewTransaction() {
 		TransactionDefinition definition = new DefaultTransactionDefinition(
 				DefaultTransactionDefinition.PROPAGATION_REQUIRES_NEW);
 		TransactionStatus transaction = transactionManager.getTransaction(definition);
-		logger.info("TRANSACTION = " + transaction);
+		logger.info("TRANSACTION = {}", transaction);
 		return transaction;
 	}
 
@@ -139,11 +134,10 @@ public class TransactionUtils {
 			if (transaction == null)
 				throw new IllegalStateException("No transaction in progress");
 
-			logger.info("TRANSACTION EXISTS - new ? " + transaction.isNewTransaction());
+			logger.info("TRANSACTION EXISTS - new ? {}", transaction.isNewTransaction());
 			return true;
 		} catch (Exception e) {
-			System.out.println(e);
-			logger.error("NO TRANSACTION: " + e);
+			logger.error("NO TRANSACTION: ", e);
 			return false;
 		}
 	}

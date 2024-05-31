@@ -52,7 +52,7 @@ public class DbConfig {
 	 * Transaction Manager For JPA
 	 */
 	@Bean
-	public PlatformTransactionManager transactionManager() throws Exception {
+	public PlatformTransactionManager transactionManager() {
 		return new JpaTransactionManager();
 	}
 
@@ -64,21 +64,21 @@ public class DbConfig {
 
 		// Tell the underlying implementation what type of database we are using - a
 		// hint to generate better SQL
-		if (adapter instanceof AbstractJpaVendorAdapter) {
-			((AbstractJpaVendorAdapter) adapter).setDatabase(Database.HSQL);
+		if (adapter instanceof AbstractJpaVendorAdapter jpaVendorAdapter) {
+			jpaVendorAdapter.setDatabase(Database.HSQL);
 		}
 
 		// Setup configuration properties
 		Properties props = new Properties();
-		boolean showSql = "TRUE".equalsIgnoreCase(this.showSql);
+		boolean shouldShowSql = "TRUE".equalsIgnoreCase(this.showSql);
 		Logger.getLogger("config").info("JPA Show generated SQL? " + this.showSql);
 
 		if (adapter instanceof EclipseLinkJpaVendorAdapter) {
-			props.setProperty("eclipselink.logging.level", showSql ? "FINE" : "WARN");
-			props.setProperty("eclipselink.logging.parameters", String.valueOf(showSql));
+			props.setProperty("eclipselink.logging.level", shouldShowSql ? "FINE" : "WARN");
+			props.setProperty("eclipselink.logging.parameters", String.valueOf(shouldShowSql));
 			props.setProperty("eclipselink.weaving", "false");
 		} else {
-			props.setProperty("hibernate.show_sql", String.valueOf(showSql));
+			props.setProperty("hibernate.show_sql", String.valueOf(shouldShowSql));
 			props.setProperty("hibernate.format_sql", "true");
 		}
 

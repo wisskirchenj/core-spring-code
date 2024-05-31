@@ -26,7 +26,7 @@ public abstract class AbstractRestaurantRepositoryTests {
 
 	@Test
 	@Transactional
-	public final void findRestaurantByMerchantNumber() {
+	public void findRestaurantByMerchantNumber() {
 		Restaurant restaurant = restaurantRepository
 				.findByMerchantNumber("1234567890");
 		assertNotNull(restaurant, "the restaurant should never be null");

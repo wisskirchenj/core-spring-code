@@ -15,7 +15,7 @@ public interface RewardRepository {
 	 * 
 	 * @return Implementation information.
 	 */
-	public String getInfo();
+	String getInfo();
 
 	/**
 	 * Create a record of a reward that will track a contribution made to an account for dining.
@@ -24,5 +24,5 @@ public interface RewardRepository {
 	 * @return a reward confirmation object that can be used for reporting and to lookup the reward details at a later
 	 * date
 	 */
-	public RewardConfirmation confirmReward(AccountContribution contribution, Dining dining);
+	RewardConfirmation confirmReward(AccountContribution contribution, Dining dining);
 }

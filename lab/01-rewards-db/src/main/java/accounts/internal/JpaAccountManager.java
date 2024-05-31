@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +45,7 @@ public class JpaAccountManager extends AbstractAccountManager {
 
 		// Use of "JOIN FETCH" produces duplicate accounts, and DISTINCT does
 		// not address this. So we have to filter it manually.
-		List<Account> result = new ArrayList<Account>();
+		List<Account> result = new ArrayList<>();
 
 		for (Account a : l) {
 			if (!result.contains(a))
@@ -58,7 +58,7 @@ public class JpaAccountManager extends AbstractAccountManager {
 	@Override
 	@Transactional(readOnly = true)
 	public Account getAccount(Long id) {
-		Account account = (Account) entityManager.find(Account.class, id);
+		Account account = entityManager.find(Account.class, id);
 
 		if (account != null) {
 			// Force beneficiaries to load too - avoid Hibernate lazy loading error

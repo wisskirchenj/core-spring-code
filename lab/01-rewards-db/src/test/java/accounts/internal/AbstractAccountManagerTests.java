@@ -74,7 +74,7 @@ public abstract class AbstractAccountManagerTests {
 		// assert the returned account contains what you expect given the state
 		// of the database
 		assertNotNull(account, "account should never be null");
-		assertEquals(account.getEntityId().longValue(),  0L, "wrong entity id");
+		assertEquals(0L,  account.getEntityId().longValue(), "wrong entity id");
 		assertEquals("123456789", account.getNumber(), "wrong account number");
 		assertEquals("Keith and Keri Donald", account.getName(), "wrong name");
 		assertEquals(2, account.getBeneficiaries().size(), "wrong beneficiary collection size");
@@ -128,7 +128,7 @@ public abstract class AbstractAccountManagerTests {
 	@Test
 	@Transactional
 	public void updateAccountBeneficiaries() {
-		Map<String, Percentage> allocationPercentages = new HashMap<String, Percentage>();
+		Map<String, Percentage> allocationPercentages = new HashMap<>();
 		allocationPercentages.put("Annabelle", Percentage.valueOf("25%"));
 		allocationPercentages.put("Corgan", Percentage.valueOf("75%"));
 		accountManager.updateBeneficiaryAllocationPercentages(0L, allocationPercentages);
@@ -150,7 +150,7 @@ public abstract class AbstractAccountManagerTests {
 	@Test
 	@Transactional
 	public void removeBeneficiary() {
-		Map<String, Percentage> allocationPercentages = new HashMap<String, Percentage>();
+		Map<String, Percentage> allocationPercentages = new HashMap<>();
 		allocationPercentages.put("Corgan", Percentage.oneHundred());
 		accountManager.removeBeneficiary(0L, "Annabelle", allocationPercentages);
 		Account account = accountManager.getAccount(0L);

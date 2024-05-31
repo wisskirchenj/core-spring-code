@@ -33,7 +33,7 @@ public abstract class AbstractDatabaseAccountManagerTests extends AbstractAccoun
 
 	@Override
 	protected void showStatus() {
-		logger.info("TRANSACTION IS : " + transactionUtils.getCurrentTransaction());
+		logger.info("TRANSACTION IS : {}", transactionUtils.getCurrentTransaction());
 	}
 
 	@BeforeEach

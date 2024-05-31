@@ -1,7 +1,7 @@
 package rewards.internal.account;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class JpaAccountRepository implements AccountRepository {
 				.createNativeQuery(ACCOUNT_BY_CC_QUERY)
 				.setParameter("ccn", creditCardNumber).getSingleResult();
 
-		Account account = (Account) entityManager.find(Account.class, accountId.longValue());
+		Account account = entityManager.find(Account.class, accountId.longValue());
 
 		// Force beneficiaries to load too - avoid Hibernate lazy loading error
 		account.getBeneficiaries().size();

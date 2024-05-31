@@ -8,7 +8,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import utils.DataManagementSetup;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Manually configured integration test for the JPA based restaurant repository
@@ -22,7 +22,7 @@ public class JpaRestaurantRepositoryTests extends AbstractRestaurantRepositoryTe
 	private TransactionStatus transactionStatus;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		DataManagementSetup dataManagementSetup = new DataManagementSetup();
 
 		JpaRestaurantRepository restaurantRepository = new JpaRestaurantRepository();
@@ -37,11 +37,11 @@ public class JpaRestaurantRepositoryTests extends AbstractRestaurantRepositoryTe
 	@Test
 	@Override
 	public void testProfile() {
-		assertTrue(restaurantRepository instanceof JpaRestaurantRepository, "JPA expected");
+        assertInstanceOf(JpaRestaurantRepository.class, restaurantRepository, "JPA expected");
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		// rollback the transaction to avoid corrupting other tests
 		if (transactionManager != null)
 			transactionManager.rollback(transactionStatus);
