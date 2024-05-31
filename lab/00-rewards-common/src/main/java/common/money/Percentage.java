@@ -3,19 +3,20 @@ package common.money;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import javax.persistence.Embeddable;
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import jakarta.persistence.Embeddable;
 
 /**
  * A percentage. Represented as a decimal value with scale 2 between 0.00 and 1.00.
- * 
  * A value object. Immutable.
  */
 @Embeddable
 public class Percentage implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 8077279865855620752L;
 
 	private BigDecimal value;
@@ -24,7 +25,7 @@ public class Percentage implements Serializable {
 	 * Create a new percentage from the specified value. Value must be between 0 and 1. For example, value .45
 	 * represents 45%. If the value has more than two digits past the decimal point it will be rounded up. For example,
 	 * value .24555 rounds up to .25.
-	 * @param the percentage value
+	 * @param value the percentage value
 	 * @throws IllegalArgumentException if the value is not between 0 and 1
 	 */
 	@JsonCreator
@@ -36,7 +37,7 @@ public class Percentage implements Serializable {
 	 * Create a new percentage from the specified double value. Converts it to a BigDecimal with exact precision. Value
 	 * must be between 0 and 1. For example, value .45 represents 45%. If the value has more than two digits past the
 	 * decimal point it will be rounded up. For example, value .24555 rounds up to .25.
-	 * @param the percentage value as a double
+	 * @param value the percentage value as a double
 	 * @throws IllegalArgumentException if the value is not between 0 and 1
 	 */
 	public Percentage(double value) {
@@ -44,12 +45,12 @@ public class Percentage implements Serializable {
 	}
 
 	@SuppressWarnings("unused")
-	private Percentage() {
+	public Percentage() {
 	}
 
 	private void initValue(BigDecimal value) {
 		value = value.setScale(2, RoundingMode.HALF_UP);
-		if (value.compareTo(BigDecimal.ZERO) == -1 || value.compareTo(BigDecimal.ONE) == 1) {
+		if (value.compareTo(BigDecimal.ZERO) < 0 || value.compareTo(BigDecimal.ONE) > 0) {
 			throw new IllegalArgumentException("Percentage value must be between 0 and 1; your value was " + value);
 		}
 		this.value = value;
@@ -61,7 +62,7 @@ public class Percentage implements Serializable {
 	 * @return the percentage object
 	 */
 	public static Percentage valueOf(String string) {
-		if (string == null || string.length() == 0) {
+		if (string == null || string.isEmpty()) {
 			throw new IllegalArgumentException("The percentage value is required");
 		}
 		boolean percent = string.endsWith("%");

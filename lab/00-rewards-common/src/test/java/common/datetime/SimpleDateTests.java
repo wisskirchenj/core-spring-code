@@ -11,10 +11,10 @@ import java.util.GregorianCalendar;
  * Unit tests for the "Simple Date" wrapper around a Calendar that tracks
  * month/date/year only, with no provision for tracking time.
  */
-public class SimpleDateTests {
+class SimpleDateTests {
 
 	@Test
-	public void testToday() {
+	void testToday() {
 		SimpleDate today = SimpleDate.today();
 		Calendar cal = new GregorianCalendar();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -25,7 +25,7 @@ public class SimpleDateTests {
 	}
 
 	@Test
-	public void testValueOfDate() {
+	void testValueOfDate() {
 		SimpleDate today = SimpleDate.today();
 		Date date = today.asDate();
 		SimpleDate today2 = SimpleDate.valueOf(date);
@@ -33,7 +33,7 @@ public class SimpleDateTests {
 	}
 
 	@Test
-	public void testValueOfTime() {
+	void testValueOfTime() {
 		SimpleDate today = SimpleDate.today();
 		long time = today.inMilliseconds();
 		SimpleDate today2 = SimpleDate.valueOf(time);

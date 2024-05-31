@@ -3,19 +3,21 @@ package common.money;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
  * A representation of money.
- * 
  * A value object. Immutable.
  */
 @Embeddable
 public class MonetaryAmount implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = -3734467432803577280L;
 
 	private BigDecimal value;
@@ -38,7 +40,7 @@ public class MonetaryAmount implements Serializable {
 	}
 
 	@SuppressWarnings("unused")
-	private MonetaryAmount() {
+	public MonetaryAmount() {
 	}
 
 	private void initValue(BigDecimal value) {
@@ -51,7 +53,7 @@ public class MonetaryAmount implements Serializable {
 	 * @return the monetary amount object
 	 */
 	public static MonetaryAmount valueOf(String string) {
-		if (string == null || string.length() == 0) {
+		if (string == null || string.isEmpty()) {
 			throw new IllegalArgumentException("The monetary amount value is required");
 		}
 		if (string.startsWith("$")) {

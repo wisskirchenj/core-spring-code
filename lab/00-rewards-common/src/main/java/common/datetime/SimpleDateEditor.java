@@ -11,7 +11,7 @@ import java.util.Locale;
  */
 public class SimpleDateEditor extends PropertyEditorSupport {
 
-	private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
+	private final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
 	
 	@Override
 	public String getAsText() {

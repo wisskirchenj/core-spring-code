@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = "2.7.5"
-        easyMockVersion = "4.3"
+        springBootVersion = "3.3.0"
+        easyMockVersion = "5.2.0"
         jmonVersion = "2.82"
     }
 
@@ -36,8 +36,6 @@ subprojects {
         }
     }
 
-    ext['spring-security.version'] = '5.8.0'
-
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter"
         implementation "org.springframework.boot:spring-boot-starter-jdbc"
@@ -46,9 +44,9 @@ subprojects {
         testImplementation "org.springframework.boot:spring-boot-starter-test"
     }
 
-    sourceCompatibility = '11'
+    sourceCompatibility = '21'
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
     }
 

@@ -1,5 +1,6 @@
 package common.datetime;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat;
  */
 public class SimpleDate implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 2285962420279644602L;
 
 	private GregorianCalendar base;
@@ -57,7 +59,7 @@ public class SimpleDate implements Serializable {
 
 	/**
 	 * Returns this date in milliseconds since 1970.
-	 * @return
+	 * @return this date in milliseconds since 1970
 	 */
 	public long inMilliseconds() {
 		return asDate().getTime();
@@ -69,11 +71,10 @@ public class SimpleDate implements Serializable {
 	}
 
 	public boolean equals(Object day) {
-		if (!(day instanceof SimpleDate)) {
+		if (!(day instanceof SimpleDate other)) {
 			return false;
 		}
-		SimpleDate other = (SimpleDate) day;
-		return (base.equals(other.base));
+        return (base.equals(other.base));
 	}
 
 	public int hashCode() {
