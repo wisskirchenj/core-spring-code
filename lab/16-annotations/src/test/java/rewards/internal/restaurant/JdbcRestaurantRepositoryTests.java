@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests the JDBC restaurant repository with a test data source to verify data access and relational-to-object mapping
  * behavior works as expected.
  */
-public class JdbcRestaurantRepositoryTests {
+class JdbcRestaurantRepositoryTests {
 
-	private JdbcRestaurantRepository repository;
+	JdbcRestaurantRepository repository;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() {
 		// simulate the Spring bean initialization lifecycle:
 		// first, construct the bean
 		repository = new JdbcRestaurantRepository();
@@ -33,13 +33,13 @@ public class JdbcRestaurantRepositoryTests {
 	}
 
 	@AfterEach
-	public void tearDown() throws Exception {
+	void tearDown() {
 		// simulate the Spring bean destruction lifecycle:
 		repository.clearRestaurantCache();
 	}
 
 	@Test
-	public void findRestaurantByMerchantNumber() {
+	void findRestaurantByMerchantNumber() {
 		Restaurant restaurant = repository.findByMerchantNumber("1234567890");
 		assertNotNull(restaurant, "restaurant is null - check your repositories cache");
 		assertEquals("1234567890", restaurant.getNumber(),"number is wrong");
@@ -48,19 +48,15 @@ public class JdbcRestaurantRepositoryTests {
 	}
 
 	@Test
-	public void findRestaurantByBogusMerchantNumber() {
-		assertThrows(EmptyResultDataAccessException.class, ()-> {
-			repository.findByMerchantNumber("bogus");
-		});
+	void findRestaurantByBogusMerchantNumber() {
+		assertThrows(EmptyResultDataAccessException.class, ()-> repository.findByMerchantNumber("bogus"));
 	}
 
 	@Test
-	public void restaurantCacheClearedAfterDestroy() throws Exception {
+	void restaurantCacheClearedAfterDestroy() {
 		// force early tear down
 		tearDown();
-		assertThrows(EmptyResultDataAccessException.class, ()-> {
-			repository.findByMerchantNumber("1234567890");
-		});
+		assertThrows(EmptyResultDataAccessException.class, ()-> repository.findByMerchantNumber("1234567890"));
 	}
 
 	private DataSource createTestDataSource() {
