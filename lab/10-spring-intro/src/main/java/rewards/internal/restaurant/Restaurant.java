@@ -1,11 +1,9 @@
 package rewards.internal.restaurant;
 
-import rewards.Dining;
-import rewards.internal.account.Account;
-
 import common.money.MonetaryAmount;
 import common.money.Percentage;
 import common.repository.Entity;
+import rewards.Dining;
 
 /**
  * A restaurant establishment in the network. Like AppleBee's.
@@ -64,11 +62,10 @@ public class Restaurant extends Entity {
 
 	/**
 	 * Calculate the benefit eligible to this account for dining at this restaurant.
-	 * @param account the account that dined at this restaurant
 	 * @param dining a dining event that occurred
 	 * @return the benefit amount eligible for reward
 	 */
-	public MonetaryAmount calculateBenefitFor(Account account, Dining dining) {
+	public MonetaryAmount calculateBenefitFor(Dining dining) {
 		return dining.getAmount().multiplyBy(benefitPercentage);
 	}
 
