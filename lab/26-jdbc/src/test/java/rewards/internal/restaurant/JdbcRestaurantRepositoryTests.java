@@ -38,9 +38,7 @@ class JdbcRestaurantRepositoryTests {
 
 	@Test
 	void testFindRestaurantByBogusMerchantNumber() {
-		assertThrows(EmptyResultDataAccessException.class, ()-> {
-			repository.findByMerchantNumber("bogus");
-		});
+		assertThrows(EmptyResultDataAccessException.class, ()-> repository.findByMerchantNumber("bogus"));
 	}
 
 	private DataSource createTestDataSource() {

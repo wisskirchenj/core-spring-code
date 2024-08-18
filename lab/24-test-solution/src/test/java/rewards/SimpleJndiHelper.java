@@ -66,7 +66,6 @@ public class SimpleJndiHelper implements BeanFactoryPostProcessor {
 	public void postProcessBeanFactory( //
 			ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		doJndiSetup();
-		return;
 	}
 
 }

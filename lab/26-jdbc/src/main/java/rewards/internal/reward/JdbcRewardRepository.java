@@ -24,7 +24,7 @@ public class JdbcRewardRepository implements RewardRepository {
 
 	public RewardConfirmation confirmReward(AccountContribution contribution, Dining dining) {
 		String sql = """
-        insert into T_REWARD 
+        insert into T_REWARD
            (CONFIRMATION_NUMBER, REWARD_AMOUNT, REWARD_DATE, ACCOUNT_NUMBER, DINING_MERCHANT_NUMBER, DINING_DATE, DINING_AMOUNT)
             values (?, ?, ?, ?, ?, ?, ?)""";
 		String confirmationNumber = nextConfirmationNumber();
