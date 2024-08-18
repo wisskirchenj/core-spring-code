@@ -1,16 +1,16 @@
 package rewards.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import common.money.Percentage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
-
+import org.springframework.stereotype.Repository;
 import rewards.internal.account.Account;
 import rewards.internal.account.AccountRepository;
 
-import common.money.Percentage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A dummy account repository implementation. Has a single Account
@@ -22,18 +22,20 @@ import common.money.Percentage;
  * dependencies such as a Database. Simple unit tests can then verify object
  * behavior by considering the state of this stub.
  */
+@Repository
+@Profile("stub")
 public class StubAccountRepository implements AccountRepository {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Map<String, Account> accountsByCreditCard = new HashMap<String, Account>();
+	private final Map<String, Account> accountsByCreditCard = new HashMap<>();
 
 	/**
 	 * Creates a single test account with two beneficiaries. Also logs creation
 	 * so we know which repository we are using.
 	 */
 	public StubAccountRepository() {
-		logger.info("Creating " + getClass().getSimpleName());
+		logger.info("Creating {}", getClass().getSimpleName());
 		Account account = new Account("123456789", "Keith and Keri Donald");
 		account.addBeneficiary("Annabelle", Percentage.valueOf("50%"));
 		account.addBeneficiary("Corgan", Percentage.valueOf("50%"));

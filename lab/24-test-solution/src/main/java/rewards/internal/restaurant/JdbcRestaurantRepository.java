@@ -1,16 +1,8 @@
 package rewards.internal.restaurant;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.sql.DataSource;
-
+import common.money.Percentage;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +10,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import common.money.Percentage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.sql.DataSource;
 
 /**
  * Loads restaurants from a data source using the JDBC API.
@@ -40,7 +38,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 * Constructor logs creation so we know which repository we are using.
 	 */
 	public JdbcRestaurantRepository() {
-		logger.info("Creating " + getClass().getSimpleName());
+		logger.info("Creating %s".formatted(getClass().getSimpleName()));
 	}
 
 	/**
@@ -64,7 +62,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	@PostConstruct
 	void populateRestaurantCache() {
 		logger.info("Loading restaurant cache");
-		restaurantCache = new HashMap<String, Restaurant>();
+		restaurantCache = new HashMap<>();
 		String sql = "select MERCHANT_NUMBER, NAME, BENEFIT_PERCENTAGE from T_RESTAURANT";
 		Connection conn = null;
 		PreparedStatement ps = null;

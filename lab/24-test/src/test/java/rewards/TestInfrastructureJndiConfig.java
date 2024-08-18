@@ -4,12 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.naming.InitialContext;
 
 /**
  * Sets up a JNDI service for our test.
- *
+ * <p>
  * See SimpleJndiHelper class to see how this works.
  */
 @Configuration

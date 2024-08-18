@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * A system test that verifies the components of the RewardNetwork application
@@ -17,20 +19,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringJUnitConfig(classes=TestInfrastructureConfig.class)
 
 // Uncomment the profile you wish to use
-@ActiveProfiles("stub")
+//@ActiveProfiles("stub")
 //@ActiveProfiles({ "local", "jdbc" })
-//@ActiveProfiles({ "jndi", "jdbc" })
-public class RewardNetworkTests {
+@ActiveProfiles({ "jndi", "jdbc" })
+class RewardNetworkTests {
 
 	/**
 	 * The object being tested.
 	 */
 	@Autowired
-	private RewardNetwork rewardNetwork;
+	RewardNetwork rewardNetwork;
 
 	@Test
 	@DisplayName("test if reward computation and distribution works")
-	public void rewardForDining() {
+	void rewardForDining() {
 		// create a new dining of 100.00 charged to credit card
 		// '1234123412341234' by merchant '123457890' as test input
 		Dining dining = Dining.createDining("100.00", "1234123412341234",

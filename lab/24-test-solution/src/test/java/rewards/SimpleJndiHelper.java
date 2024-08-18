@@ -28,8 +28,7 @@ public class SimpleJndiHelper implements BeanFactoryPostProcessor {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public void doJndiSetup() {
-		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, //
-				"org.osjava.sj.SimpleContextFactory");
+		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory");
 		System.setProperty("org.osjava.sj.root", "jndi");
 		System.setProperty("org.osjava.jndi.delimiter", "/");
 		System.setProperty("org.osjava.sj.jndi.shared", "true");
@@ -40,15 +39,16 @@ public class SimpleJndiHelper implements BeanFactoryPostProcessor {
 			InitialContext ic = new InitialContext();
 
 			// Construct DataSource
-			DataSource ds = new EmbeddedDatabaseBuilder() //
-					.addScript("classpath:rewards/testdb/schema.sql") //
-					.addScript("classpath:rewards/testdb/data.sql") //
+			DataSource ds = new EmbeddedDatabaseBuilder()
+					.addScript("classpath:rewards/testdb/schema.sql")
+					.addScript("classpath:rewards/testdb/data.sql")
 					.build();
 
 			// Bind as a JNDI resource
 			ic.rebind(REWARDS_DB_JNDI_PATH, ds);
-			logger.info("JNDI Resource '" + REWARDS_DB_JNDI_PATH //
-					+ "' instanceof " + ds.getClass().getSimpleName());
+            //
+            logger.info("JNDI Resource '%s' instanceof %s"
+					.formatted(REWARDS_DB_JNDI_PATH, ds.getClass().getSimpleName()));
 		} catch (NamingException ex) {
 			logger.error("JNDI setup error", ex);
 			ex.printStackTrace();

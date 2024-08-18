@@ -25,7 +25,7 @@ class RewardNetworkImplTests {
 	/**
 	 * The object being tested.
 	 */
-	private RewardNetworkImpl rewardNetwork;
+	RewardNetworkImpl rewardNetwork;
 
 	@BeforeEach
 	void setUp() {

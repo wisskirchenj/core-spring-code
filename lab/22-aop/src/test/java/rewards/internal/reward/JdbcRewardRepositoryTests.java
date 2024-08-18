@@ -1,44 +1,42 @@
 package rewards.internal.reward;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import javax.sql.DataSource;
-
+import common.money.MonetaryAmount;
+import common.money.Percentage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import rewards.AccountContribution;
 import rewards.Dining;
 import rewards.RewardConfirmation;
 import rewards.internal.account.Account;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
-import common.money.MonetaryAmount;
-import common.money.Percentage;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.sql.DataSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests the JDBC reward repository with a test data source to verify data access and relational-to-object mapping
  * behavior works as expected.
  */
-public class JdbcRewardRepositoryTests {
+class JdbcRewardRepositoryTests {
 
-	private JdbcRewardRepository repository;
+	JdbcRewardRepository repository;
 
-	private DataSource dataSource;
+	DataSource dataSource;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	void setUp() {
 		repository = new JdbcRewardRepository();
 		dataSource = createTestDataSource();
 		repository.setDataSource(dataSource);
 	}
 
-	@Test public void createReward() throws SQLException {
+	@Test
+	void createReward() throws SQLException {
 		Dining dining = Dining.createDining("100.00", "1234123412341234", "0123456789");
 
 		Account account = new Account("1", "Keith and Keri Donald");
@@ -49,18 +47,18 @@ public class JdbcRewardRepositoryTests {
 		AccountContribution contribution = account.makeContribution(MonetaryAmount.valueOf("8.00"));
 		RewardConfirmation confirmation = repository.updateReward(contribution, dining);
 		assertNotNull(confirmation, "confirmation should not be null");
-		assertNotNull(confirmation.getConfirmationNumber(), "confirmation number should not be null");
-		assertEquals(contribution, confirmation.getAccountContribution(), "wrong contribution object");
-		verifyRewardInserted(confirmation, dining);
+		assertNotNull(confirmation.confirmationNumber(), "confirmation number should not be null");
+		assertEquals(contribution, confirmation.accountContribution(), "wrong contribution object");
+		verifyRewardInserted(confirmation);
 	}
 
-	private void verifyRewardInserted(RewardConfirmation confirmation, Dining dining) throws SQLException {
+	private void verifyRewardInserted(RewardConfirmation confirmation) throws SQLException {
 		assertEquals(1, getRewardCount());
 		Statement stmt = dataSource.getConnection().createStatement();
 		ResultSet rs = stmt.executeQuery("select REWARD_AMOUNT from T_REWARD where CONFIRMATION_NUMBER = '"
-				+ confirmation.getConfirmationNumber() + "'");
+				+ confirmation.confirmationNumber() + "'");
 		rs.next();
-		assertEquals(confirmation.getAccountContribution().getAmount(), MonetaryAmount.valueOf(rs.getString(1)));
+		assertEquals(confirmation.accountContribution().amount(), MonetaryAmount.valueOf(rs.getString(1)));
 	}
 
 	private int getRewardCount() throws SQLException {

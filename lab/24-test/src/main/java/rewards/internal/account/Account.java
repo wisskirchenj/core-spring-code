@@ -1,15 +1,14 @@
 package rewards.internal.account;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import rewards.AccountContribution;
-import rewards.AccountContribution.Distribution;
-
 import common.money.MonetaryAmount;
 import common.money.Percentage;
 import common.repository.Entity;
+import rewards.AccountContribution;
+import rewards.AccountContribution.Distribution;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * An account for a member of the reward network. An account has one or more beneficiaries whose allocations must add up
@@ -26,7 +25,7 @@ public class Account extends Entity {
 
 	private String name;
 
-	private Set<Beneficiary> beneficiaries = new HashSet<Beneficiary>();
+	private final Set<Beneficiary> beneficiaries = new HashSet<>();
 
 	@SuppressWarnings("unused")
 	private Account() {
@@ -86,11 +85,7 @@ public class Account extends Entity {
 				return false;
 			}
 		}
-		if (totalPercentage.equals(Percentage.oneHundred())) {
-			return true;
-		} else {
-			return false;
-		}
+        return totalPercentage.equals(Percentage.oneHundred());
 	}
 
 	/**
@@ -113,7 +108,7 @@ public class Account extends Entity {
 	 * @return the individual beneficiary distributions
 	 */
 	private Set<Distribution> distribute(MonetaryAmount amount) {
-		Set<Distribution> distributions = new HashSet<Distribution>(beneficiaries.size());
+		Set<Distribution> distributions = HashSet.newHashSet(beneficiaries.size());
 		for (Beneficiary beneficiary : beneficiaries) {
 			MonetaryAmount distributionAmount = amount.multiplyBy(beneficiary.getAllocationPercentage());
 			beneficiary.credit(distributionAmount);

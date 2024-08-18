@@ -1,19 +1,16 @@
 package rewards.internal.restaurant;
 
+import common.money.Percentage;
+import org.springframework.dao.EmptyResultDataAccessException;
+import rewards.Dining;
+import rewards.internal.account.Account;
+import rewards.internal.exception.RewardDataAccessException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.sql.DataSource;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import rewards.internal.exception.RewardDataAccessException;
-
-import rewards.Dining;
-import rewards.internal.account.Account;
-
-import common.money.Percentage;
 
 /**
  * Loads restaurants from a data source using the JDBC API.
@@ -33,41 +30,14 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 
 	public Restaurant findByMerchantNumber(String merchantNumber) {
 		String sql = "select MERCHANT_NUMBER, NAME, BENEFIT_PERCENTAGE, BENEFIT_AVAILABILITY_POLICY from T_RESTAURANT where MERCHANT_NUMBER = ?";
-		Restaurant restaurant = null;
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			conn = dataSource.getConnection();
-			ps = conn.prepareStatement(sql);
+		Restaurant restaurant;
+		try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, merchantNumber);
-			rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 			advanceToNextRow(rs);
 			restaurant = mapRestaurant(rs);
 		} catch (SQLException e) {
 			throw new RewardDataAccessException("SQL exception occurred finding by merchant number", e);
-		} finally {
-			if (rs != null) {
-				try {
-					// Close to prevent database cursor exhaustion
-					rs.close();
-				} catch (SQLException ex) {
-				}
-			}
-			if (ps != null) {
-				try {
-					// Close to prevent database cursor exhaustion
-					ps.close();
-				} catch (SQLException ex) {
-				}
-			}
-			if (conn != null) {
-				try {
-					// Close to prevent database connection exhaustion
-					conn.close();
-				} catch (SQLException ex) {
-				}
-			}
 		}
 		return restaurant;
 	}
@@ -93,7 +63,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 * Advances a ResultSet to the next row and throws an exception if there are no rows.
 	 * @param rs the ResultSet to advance
 	 * @throws EmptyResultDataAccessException if there is no next row
-	 * @throws SQLException
+	 * @throws SQLException if an SQL error occurs
 	 */
 	private void advanceToNextRow(ResultSet rs) throws EmptyResultDataAccessException, SQLException {
 		if (!rs.next()) {

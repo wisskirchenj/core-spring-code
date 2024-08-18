@@ -1,17 +1,15 @@
 package rewards.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import common.money.Percentage;
 import org.springframework.dao.EmptyResultDataAccessException;
-
 import rewards.Dining;
 import rewards.internal.account.Account;
 import rewards.internal.restaurant.BenefitAvailabilityPolicy;
 import rewards.internal.restaurant.Restaurant;
 import rewards.internal.restaurant.RestaurantRepository;
 
-import common.money.Percentage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A dummy restaurant repository implementation. Has a single restaurant "Apple Bees" with a 8% benefit availability
@@ -23,7 +21,7 @@ import common.money.Percentage;
  */
 public class StubRestaurantRepository implements RestaurantRepository {
 
-	private Map<String, Restaurant> restaurantsByMerchantNumber = new HashMap<String, Restaurant>();
+	private final Map<String, Restaurant> restaurantsByMerchantNumber = new HashMap<>();
 
 	public StubRestaurantRepository() {
 		Restaurant restaurant = new Restaurant("1234567890", "Apple Bees");

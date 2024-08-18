@@ -16,21 +16,6 @@
 
 package rewards;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -41,6 +26,21 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.platform.commons.support.ReflectionSupport;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * {@code @CaptureSystemOutput} is a JUnit JUpiter extension for capturing
@@ -83,12 +83,12 @@ public @interface CaptureSystemOutput {
 	class Extension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
 		@Override
-		public void beforeEach(ExtensionContext context) throws Exception {
+		public void beforeEach(ExtensionContext context) {
 			getOutputCapture(context).captureOutput();
 		}
 
 		@Override
-		public void afterEach(ExtensionContext context) throws Exception {
+		public void afterEach(ExtensionContext context) {
 			OutputCapture outputCapture = getOutputCapture(context);
 			try {
 				if (!outputCapture.matchers.isEmpty()) {
@@ -143,7 +143,7 @@ public @interface CaptureSystemOutput {
 	 * @author Andy Wilkinson
 	 * @author Sam Brannen
 	 */
-	static class OutputCapture {
+	 class OutputCapture {
 
 		private final List<Matcher<? super String>> matchers = new ArrayList<>();
 

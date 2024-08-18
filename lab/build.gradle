@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "3.3.0"
+        springBootVersion = "3.3.2"
         easyMockVersion = "5.2.0"
         jmonVersion = "2.82"
     }

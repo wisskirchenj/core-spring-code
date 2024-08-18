@@ -1,30 +1,28 @@
 package rewards.internal.restaurant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import common.money.MonetaryAmount;
+import common.money.Percentage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import rewards.Dining;
 import rewards.internal.account.Account;
 
-import common.money.MonetaryAmount;
-import common.money.Percentage;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for exercising the behavior of the Restaurant aggregate entity. A restaurant calculates a benefit to award
  * to an account for dining based on an availability policy and benefit percentage.
  */
-public class RestaurantTests {
+class RestaurantTests {
 
-	private Restaurant restaurant;
+	Restaurant restaurant;
 
-	private Account account;
+	Account account;
 
-	private Dining dining;
+	Dining dining;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		// configure the restaurant, the object being tested
 		restaurant = new Restaurant("1234567890", "AppleBee's");
 		restaurant.setBenefitPercentage(Percentage.valueOf("8%"));
@@ -36,14 +34,14 @@ public class RestaurantTests {
 	}
 
 	@Test
-	public void testCalcuateBenefitFor() {
+	void testCalcuateBenefitFor() {
 		MonetaryAmount benefit = restaurant.calculateBenefitFor(account, dining);
 		// assert 8.00 eligible for reward
 		assertEquals(MonetaryAmount.valueOf("8.00"), benefit);
 	}
 
 	@Test
-	public void testNoBenefitAvailable() {
+	void testNoBenefitAvailable() {
 		// configure stub that always returns false
 		restaurant.setBenefitAvailabilityPolicy(new StubBenefitAvailibilityPolicy(false));
 		MonetaryAmount benefit = restaurant.calculateBenefitFor(account, dining);
@@ -58,7 +56,7 @@ public class RestaurantTests {
 	 */
 	private static class StubBenefitAvailibilityPolicy implements BenefitAvailabilityPolicy {
 
-		private boolean isBenefitAvailable;
+		private final boolean isBenefitAvailable;
 
 		public StubBenefitAvailibilityPolicy(boolean isBenefitAvailable) {
 			this.isBenefitAvailable = isBenefitAvailable;

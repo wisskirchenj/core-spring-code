@@ -16,5 +16,5 @@ public interface BenefitAvailabilityPolicy {
 	 * @param dining the dining event
 	 * @return benefit availability status
 	 */
-	public boolean isBenefitAvailableFor(Account account, Dining dining);
+	boolean isBenefitAvailableFor(Account account, Dining dining);
 }

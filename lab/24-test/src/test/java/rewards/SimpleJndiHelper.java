@@ -40,12 +40,13 @@ public class SimpleJndiHelper implements BeanFactoryPostProcessor {
 			InitialContext ic = new InitialContext();
 
 			// Construct DataSource
-			DataSource ds = new EmbeddedDatabaseBuilder().addScript("classpath:rewards/testdb/schema.sql")
+			DataSource ds = new EmbeddedDatabaseBuilder()
+					.addScript("classpath:rewards/testdb/schema.sql")
 					.addScript("classpath:rewards/testdb/data.sql").build();
 
 			// Bind as a JNDI resource
 			ic.rebind(REWARDS_DB_JNDI_PATH, ds);
-			logger.info("JNDI Resource '" + REWARDS_DB_JNDI_PATH + "' instanceof " + ds.getClass().getSimpleName());
+			logger.info("JNDI Resource '{}' instanceof {}",   REWARDS_DB_JNDI_PATH, ds.getClass().getSimpleName());
 		} catch (NamingException ex) {
 			logger.error("JNDI setup failed", ex);
 			ex.printStackTrace();
@@ -62,7 +63,6 @@ public class SimpleJndiHelper implements BeanFactoryPostProcessor {
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		doJndiSetup();
-		return;
 	}
 
 }

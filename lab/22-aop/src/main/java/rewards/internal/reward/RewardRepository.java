@@ -16,5 +16,5 @@ public interface RewardRepository {
 	 * @return a reward confirmation object that can be used for reporting and to lookup the reward details at a later
 	 * date
 	 */
-	public RewardConfirmation updateReward(AccountContribution contribution, Dining dining);
+	RewardConfirmation updateReward(AccountContribution contribution, Dining dining);
 }

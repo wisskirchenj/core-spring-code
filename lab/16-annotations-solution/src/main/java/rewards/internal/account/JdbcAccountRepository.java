@@ -1,18 +1,16 @@
 package rewards.internal.account;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
+import common.money.MonetaryAmount;
+import common.money.Percentage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import common.money.MonetaryAmount;
-import common.money.Percentage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.sql.DataSource;
 
 /**
  * Loads accounts from a data source using the JDBC API.
@@ -33,76 +31,29 @@ public class JdbcAccountRepository implements AccountRepository {
 
 	public Account findByCreditCard(String creditCardNumber) {
 		String sql = "select a.ID as ID, a.NUMBER as ACCOUNT_NUMBER, a.NAME as ACCOUNT_NAME, c.NUMBER as CREDIT_CARD_NUMBER, b.NAME as BENEFICIARY_NAME, b.ALLOCATION_PERCENTAGE as BENEFICIARY_ALLOCATION_PERCENTAGE, b.SAVINGS as BENEFICIARY_SAVINGS from T_ACCOUNT a, T_ACCOUNT_BENEFICIARY b, T_ACCOUNT_CREDIT_CARD c where ID = b.ACCOUNT_ID and ID = c.ACCOUNT_ID and c.NUMBER = ?";
-		Account account = null;
-		Connection conn = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			conn = dataSource.getConnection();
-			ps = conn.prepareStatement(sql);
+		try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, creditCardNumber);
-			rs = ps.executeQuery();
-			account = mapAccount(rs);
+			ResultSet rs = ps.executeQuery();
+			return mapAccount(rs);
 		} catch (SQLException e) {
 			throw new RuntimeException("SQL exception occurred finding by credit card number", e);
-		} finally {
-			if (rs != null) {
-				try {
-					// Close to prevent database cursor exhaustion
-					rs.close();
-				} catch (SQLException ex) {
-				}
-			}
-			if (ps != null) {
-				try {
-					// Close to prevent database cursor exhaustion
-					ps.close();
-				} catch (SQLException ex) {
-				}
-			}
-			if (conn != null) {
-				try {
-					// Close to prevent database connection exhaustion
-					conn.close();
-				} catch (SQLException ex) {
-				}
-			}
 		}
-		return account;
 	}
 
 	public void updateBeneficiaries(Account account) {
 		String sql = "update T_ACCOUNT_BENEFICIARY SET SAVINGS = ? where ACCOUNT_ID = ? and NAME = ?";
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try {
-			conn = dataSource.getConnection();
-			ps = conn.prepareStatement(sql);
-			for (Beneficiary beneficiary : account.getBeneficiaries()) {
-				ps.setBigDecimal(1, beneficiary.getSavings().asBigDecimal());
-				ps.setLong(2, account.getEntityId());
-				ps.setString(3, beneficiary.getName());
-				ps.executeUpdate();
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException("SQL exception occurred updating beneficiary savings", e);
-		} finally {
-			if (ps != null) {
-				try {
-					// Close to prevent database cursor exhaustion
-					ps.close();
-				} catch (SQLException ex) {
-				}
-			}
-			if (conn != null) {
-				try {
-					// Close to prevent database connection exhaustion
-					conn.close();
-				} catch (SQLException ex) {
-				}
-			}
-		}
-	}
+        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (Beneficiary beneficiary : account.getBeneficiaries()) {
+                ps.setBigDecimal(1, beneficiary.getSavings().asBigDecimal());
+                ps.setLong(2, account.getEntityId());
+                ps.setString(3, beneficiary.getName());
+                ps.addBatch();
+            }
+			ps.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException("SQL exception occurred updating beneficiary savings", e);
+        }
+    }
 
 	/**
 	 * Map the rows returned from the join of T_ACCOUNT and T_ACCOUNT_BENEFICIARY to an fully-reconstituted Account

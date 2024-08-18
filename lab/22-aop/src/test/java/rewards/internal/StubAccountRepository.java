@@ -1,14 +1,12 @@
 package rewards.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import common.money.Percentage;
 import org.springframework.dao.EmptyResultDataAccessException;
-
 import rewards.internal.account.Account;
 import rewards.internal.account.AccountRepository;
 
-import common.money.Percentage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A dummy account repository implementation. Has a single Account "Keith and Keri Donald" with two beneficiaries
@@ -20,7 +18,7 @@ import common.money.Percentage;
  */
 public class StubAccountRepository implements AccountRepository {
 
-	private Map<String, Account> accountsByCreditCard = new HashMap<String, Account>();
+	private final Map<String, Account> accountsByCreditCard = new HashMap<>();
 
 	public StubAccountRepository() {
 		Account account = new Account("123456789", "Keith and Keri Donald");

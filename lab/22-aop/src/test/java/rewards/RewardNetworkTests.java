@@ -2,11 +2,8 @@ package rewards;
 
 import common.money.MonetaryAmount;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import rewards.CaptureSystemOutput.OutputCapture;
 import rewards.internal.aspects.LoggingAspect;
 
@@ -18,20 +15,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * work together to reward for dining successfully. Uses Spring to bootstrap the
  * application for use in a test environment.
  */
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes={SystemTestConfig.class})
-@EnableAutoConfiguration
-public class RewardNetworkTests {
+@SpringJUnitConfig(SystemTestConfig.class)
+//@EnableAutoConfiguration
+class RewardNetworkTests {
 
 	/**
 	 * The object being tested.
 	 */
 	@Autowired
-	private RewardNetwork rewardNetwork;
+    RewardNetwork rewardNetwork;
 
 	@Test
 	@CaptureSystemOutput
-	public void testRewardForDining(OutputCapture capture) {
+    void testRewardForDining(OutputCapture capture) {
 		// create a new dining of 100.00 charged to credit card '1234123412341234' by merchant '123457890' as test input
 		Dining dining = Dining.createDining("100.00", "1234123412341234", "1234567890");
 
@@ -40,33 +36,27 @@ public class RewardNetworkTests {
 
 		// assert the expected reward confirmation results
 		assertNotNull(confirmation);
-		assertNotNull(confirmation.getConfirmationNumber());
+		assertNotNull(confirmation.confirmationNumber());
 
 		// assert an account contribution was made
-		AccountContribution contribution = confirmation.getAccountContribution();
+		AccountContribution contribution = confirmation.accountContribution();
 		assertNotNull(contribution);
 
 		// the contribution account number should be '123456789'
-		assertEquals("123456789", contribution.getAccountNumber());
+		assertEquals("123456789", contribution.accountNumber());
 
 		// the total contribution amount should be 8.00 (8% of 100.00)
-		assertEquals(MonetaryAmount.valueOf("8.00"), contribution.getAmount());
+		assertEquals(MonetaryAmount.valueOf("8.00"), contribution.amount());
 
 		// the total contribution amount should have been split into 2 distributions
-		assertEquals(2, contribution.getDistributions().size());
+		assertEquals(2, contribution.distributions().size());
 
 		// each distribution should be 4.00 (as both have a 50% allocation)
-		assertEquals(MonetaryAmount.valueOf("4.00"), contribution.getDistribution("Annabelle").getAmount());
-		assertEquals(MonetaryAmount.valueOf("4.00"), contribution.getDistribution("Corgan").getAmount());
+		assertEquals(MonetaryAmount.valueOf("4.00"), contribution.getDistribution("Annabelle").amount());
+		assertEquals(MonetaryAmount.valueOf("4.00"), contribution.getDistribution("Corgan").amount());
 		
-		// TODO-06: Run this test. It should pass AND you should see TWO lines of
-		// log output from the LoggingAspect on the console
-		int expectedMatches = 2;
+		int expectedMatches = 4;
 		checkConsoleOutput(capture, expectedMatches);
-		
-		// TODO-09: Save all your work, and change the expected matches value above from 2 to 4.
-		// Rerun the RewardNetworkTests.  It should pass, and you should now see FOUR lines of
-		// console output from the LoggingAspect.
 	}
 	
     /**
@@ -107,7 +97,6 @@ public class RewardNetworkTests {
                 }
             }
         }
-        
         assertEquals(expectedMatches, matches);
     }
 

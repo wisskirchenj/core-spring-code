@@ -1,11 +1,11 @@
 package rewards;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 @Configuration
 @Profile("jndi")
@@ -21,8 +21,6 @@ public class TestInfrastructureJndiConfig {
 	
 	@Bean
 	public DataSource dataSource() throws Exception {
-		return (DataSource) 
-			(new InitialContext())
-				.lookup("java:/comp/env/jdbc/rewards");	
+		return (DataSource) new InitialContext().lookup("java:/comp/env/jdbc/rewards");
 	}
 }

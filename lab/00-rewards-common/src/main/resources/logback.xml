@@ -11,47 +11,27 @@
 	</appender>
 
 	<!-- Application logger -->
-	<logger name="rewards">
-		<level value="info" />
-	</logger>
+	<logger name="rewards" level="info" />
 
 	<!--  Spring loggers -->
-	<logger name="org.springframework">
-		<level value="info" />
-	</logger>
-	
-	<logger name="org.springframework.beans">
-		<level value="warn" />
-	</logger>
-	
-	<logger name="org.springframework.jdbc">
-		<level value="warn" />
-	</logger>
+	<logger name="org.springframework" level="info" />
 
-	<logger name="org.springframework.transaction">
-		<level value="warn" />
-	</logger>
+	<logger name="org.springframework.beans" level="warn" />
 
-	<logger name="org.springframework.orm">
-		<level value="warn" />
-	</logger>
+	<logger name="org.springframework.jdbc" level="warn" />
 
-	<logger name="org.springframework.web">
-		<level value="warn" />
-	</logger>
+	<logger name="org.springframework.transaction" level="warn" />
 
-	<logger name="org.springframework.http">
-		<level value="warn" />
-	</logger>
-	
+	<logger name="org.springframework.orm" level="warn" />
+
+	<logger name="org.springframework.web" level="warn" />
+
+	<logger name="org.springframework.http" level="warn" />
+
 	<!-- 3rd party Loggers -->
-	<logger name="org.hibernate">
-		<level value="warn" />
-	</logger>
+	<logger name="org.hibernate" level="warn" />
 
-	<logger name="org.jboss">
-		<level value="warn" />
-	</logger>
+	<logger name="org.jboss" level="warn" />
 
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
